@@ -12,11 +12,6 @@
 
 #ifndef FT_DB_H
 # define FT_DB_H
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <fcntl.h>
 # include "data.h"
 # include "libft.h"
 # define CREATE 1
