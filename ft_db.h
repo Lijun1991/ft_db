@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/01 22:51:05 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 14:14:29 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,18 @@ typedef struct		s_uid
 	struct s_uid	*next;
 }					t_uid;
 
+typedef struct		s_sample
+{
+	char			*id;
+	char			*piscine;
+	char			*name;
+	char			*mobile;
+	char			*email;
+	char			*picture;
+}					t_sample;
+
 t_crud				*parse_argv(char **argv);
 int					do_operation(t_crud *o);
+t_entry				*get_entry(void);
 
 #endif

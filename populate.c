@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 00:17:56 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 14:19:18 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,79 +79,6 @@ t_uid	*get_uids(void)
 	return (lst);
 }
 
-t_entry	*set_entry(void)
-{
-	int		fd;
-	char	**av;
-	char	**s1;
-	char	**s2;
-	int		r;
-	int		i;
-	char	*line;
-	t_entry	*entry;
-	t_data	*data;
-	char	*domaine;
-	char	*month;
-	char	*year;
-
-	entry = malloc(sizeof(t_entry));
-	entry->next = NULL;
-	fd = open("tmp_uidinfo", O_RDONLY);
-	while ((r = gnl(fd, &line)) && r != -1)
-	{
-		if (line[0] == '#' || line[0] == '\0')
-		{
-			free(line);
-			continue ;
-		}
-		av = ft_strsplit(line, ':');
-		if (av)
-		{
-			if (av[0])
-			{
-				if (strcmp(av[0], "dn") == 0 && av[1])
-				{
-					s1 = ft_strsplit(av[i + 1], ',');
-					if (s1)
-					{
-						i = 0;
-						month = NULL;
-						year = NULL;
-						domaine = NULL;
-						while (s1[i])
-						{
-							if (strncmp(s1[i], "uid=", 4) == 0)
-								entry->id = strdup(&s1[i][5]);
-							else if (!month && strncmp(s1[i], "ou=") == 0 &&
-										strcmp(&s1[i][4], "people") != 0)
-								month = strdup(&s1[i][4]);
-							else if (!year && strncmp(s1[i], "ou=") == 0 &&
-										strcmp(&s1[i][4], "people") != 0)
-								year = strdup(&s1[i][4]);
-							else if (strncmp(s1[i], "dc=42") == 0)
-								domain = strdup("42.us.org");
-							free(s1[i]);
-						}
-						
-						free(month);
-						free(year);
-						free(domaine);
-						free(s1);
-					}
-				}
-				i = 0;
-				while (av[i])
-					free(av[i++]);
-			}
-			free(av);
-		}
-		free(line);
-	}
-	close(fd);
-	unlink("tmp_uidinfo");
-	return (entry);
-}
-
 int		populate(void)
 {
 	t_uid	*lst;
@@ -196,7 +123,7 @@ int		populate(void)
 			if (status)
 				return (-1);
 			*curentry = set_entry();
-
+			curentry = &(*curentry)->next;
 		}
 		else
 			return (-1);
@@ -205,6 +132,7 @@ int		populate(void)
 		free(cur->uid);
 		free(cur);
 	}
+	display_entry(lst);
 	return (0);
 	/*
 	int		fd;
@@ -231,6 +159,23 @@ int		populate(void)
 		return(1);
 	return (0);
 	*/
+}
+
+void	display_entry(t_entry *lst)
+{
+	t_data	*c;
+
+	while (lst)
+	{
+		printf("%d:\n", lst->id);
+		c = lst->data;
+		while (c)
+		{
+			if (strcmp(c->key, "picture"))
+				;
+			printf("%s: %s\n", c->key, c->value);
+		}
+	}
 }
 
 int		main(int argc, char **argv, char **env)
