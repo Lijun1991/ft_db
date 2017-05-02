@@ -23,7 +23,7 @@ typedef struct	s_data
 typedef struct	s_entry
 {
 	int			id;
-	t_data		*data;
-}
+	t_data		**data;
+};
 
 #endif
