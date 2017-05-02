@@ -23,9 +23,8 @@ typedef struct		s_data
 
 typedef struct		s_entry
 {
-	char			*id;
-	t_data			*data;
-	struct s_entry	*next;
-}					t_entry;
+	int			id;
+	t_data		**data;
+};
 
 #endif
