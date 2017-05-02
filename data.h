@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:27:22 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/01 23:11:44 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 14:33:29 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ typedef struct		s_data
 
 typedef struct		s_entry
 {
-	int			id;
-	t_data		**data;
-};
+	char			*id;
+	t_data			*data;
+	struct s_entry	*next;
+}					t_entry;
 
 #endif

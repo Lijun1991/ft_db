@@ -6,11 +6,38 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 14:19:18 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 15:05:48 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
+
+void	display_entry(t_entry *entry)
+{
+	t_data	*c;
+
+	printf("%s:\n", entry->id);
+	c = entry->data;
+	while (c)
+	{
+		if (!strcmp(c->key, "picture"))
+			printf("%s: \033]1337;File=inline=1:%s:\a\n", c->key, c->value);
+		else
+			printf("%s: %s\n", c->key, c->value);
+		c = c->next;
+	}
+	printf("\n");
+}
+
+void	display_entries(t_entry *lst)
+{
+	while (lst)
+	{
+		display_entry(lst);
+		lst = lst->next;
+		getchar();
+	}
+}
 
 t_uid	*get_uids(void)
 {
@@ -86,12 +113,7 @@ int		populate(void)
 	int		fd;
 	pid_t	pid;
 	char	**av;
-	char	*path;
 	int		status;
-	char	*line;
-	char	**splt;
-	int		r;
-	int		i;
 	t_entry	*entry;
 	t_entry	**curentry;
 
@@ -112,8 +134,8 @@ int		populate(void)
 			av = malloc(sizeof(char*) * 4);
 			av[0] = strdup("/usr/bin/ldapsearch");
 			av[1] = strdup("-x");
-			av[3] = ft_strjoin("uid=", lst->uid);
-			av[4] = NULL;
+			av[2] = ft_strjoin("uid=", lst->uid);
+			av[3] = NULL;
 			execve("/usr/bin/ldapsearch", av, NULL);
 			exit(1);
 		}
@@ -122,7 +144,10 @@ int		populate(void)
 			wait(&status);
 			if (status)
 				return (-1);
-			*curentry = set_entry();
+			printf("Getting entry of: %s\n", lst->uid);
+			*curentry = get_entry();
+			display_entry(*curentry);
+			getchar();
 			curentry = &(*curentry)->next;
 		}
 		else
@@ -132,53 +157,11 @@ int		populate(void)
 		free(cur->uid);
 		free(cur);
 	}
-	display_entry(lst);
+	//display_entries(entry);
 	return (0);
-	/*
-	int		fd;
-	pid_t	pid;
-	char	**av;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		fd = open("tmp_db", O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-		dup2(fd, 1);
-		close(fd);
-		av = malloc(sizeof(char*) * 3);
-		av[0] = strdup("/usr/bin/ldapsearch");
-		av[1] = strdup("-x");
-		av[2] = NULL;
-		execve("/usr/bin/ldapsearch", av, NULL);
-		perror("exec");
-		exit(1);
-	}
-	else if (pid > 0)
-		wait(0);
-	else
-		return(1);
-	return (0);
-	*/
 }
 
-void	display_entry(t_entry *lst)
-{
-	t_data	*c;
-
-	while (lst)
-	{
-		printf("%d:\n", lst->id);
-		c = lst->data;
-		while (c)
-		{
-			if (strcmp(c->key, "picture"))
-				;
-			printf("%s: %s\n", c->key, c->value);
-		}
-	}
-}
-
-int		main(int argc, char **argv, char **env)
+int		main(void)
 {
 	if (populate())
 	{
