@@ -6,11 +6,37 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 15:05:48 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 15:57:32 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
+
+void	free_entry(t_entry *entry)
+{
+	t_entry	*tmpentry;
+	t_data	*data;
+	t_data	*tmpdata;
+
+	while (entry)
+	{
+		tmpentry = entry->next;
+		data = entry->data;
+		while (data)
+		{
+			tmpdata = data->next;
+			if (data->key)
+				free(data->key);
+			if (data->value)
+				free(data->value);
+			free(data);
+			data = tmpdata;
+		}
+		free(entry->id);
+		free(entry);
+		entry = tmpentry;
+	}
+}
 
 void	display_entry(t_entry *entry)
 {
@@ -39,7 +65,7 @@ void	display_entries(t_entry *lst)
 	}
 }
 
-t_uid	*get_uids(void)
+t_uid	*get_uids(int *total)
 {
 	int		fd;
 	int		r;
@@ -89,6 +115,8 @@ t_uid	*get_uids(void)
 						(*cur)->uid = strdup(&av[i + 1][1]);
 						(*cur)->next = NULL;
 						cur = &(*cur)->next;
+						if (total)
+							(*total)++;
 					}
 					while (av[i])
 						free(av[i++]);
@@ -96,6 +124,8 @@ t_uid	*get_uids(void)
 				free(av);
 			}
 			free(line);
+			if (total && *total == 10)
+				break ;
 		}
 		close(fd);
 		gnl(-42, NULL);
@@ -108,6 +138,10 @@ t_uid	*get_uids(void)
 
 int		populate(void)
 {
+	int		nll;
+	int		i;
+	int		total;
+	int		len;
 	t_uid	*lst;
 	t_uid	*cur;
 	int		fd;
@@ -117,11 +151,16 @@ int		populate(void)
 	t_entry	*entry;
 	t_entry	**curentry;
 
-	lst = get_uids();
+	total = 0;
+	printf("Getting uids...\n");
+	lst = get_uids(&total);
 	if (lst == NULL)
 		return (1);
+	len = ft_numlen(total);
 	entry = NULL;
 	curentry = &entry;
+	i = 0;
+	printf("Setting entries...\n");
 	while (lst)
 	{
 		status = 0;
@@ -129,13 +168,16 @@ int		populate(void)
 		if (pid == 0)
 		{
 			fd = open("tmp_uidinfo", O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+			nll = open("/dev/null", O_WRONLY);
+			dup2(nll, 2);
 			dup2(fd, 1);
 			close(fd);
+			close(nll);
 			av = malloc(sizeof(char*) * 4);
 			av[0] = strdup("/usr/bin/ldapsearch");
-			av[1] = strdup("-x");
-			av[2] = ft_strjoin("uid=", lst->uid);
-			av[3] = NULL;
+			//av[1] = strdup("-x");
+			av[1] = ft_strjoin("uid=", lst->uid);
+			av[2] = NULL;
 			execve("/usr/bin/ldapsearch", av, NULL);
 			exit(1);
 		}
@@ -144,10 +186,11 @@ int		populate(void)
 			wait(&status);
 			if (status)
 				return (-1);
-			printf("Getting entry of: %s\n", lst->uid);
+			//printf("Getting entry of: %s\n", lst->uid);
+			ft_printf("Getting entry %*d/%*d\r", len, ++i, len, total);
 			*curentry = get_entry();
-			display_entry(*curentry);
-			getchar();
+			//display_entry(*curentry);
+			//getchar();
 			curentry = &(*curentry)->next;
 		}
 		else
@@ -157,6 +200,7 @@ int		populate(void)
 		free(cur->uid);
 		free(cur);
 	}
+	free_entry(entry);
 	//display_entries(entry);
 	return (0);
 }

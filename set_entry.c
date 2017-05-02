@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 13:26:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 15:12:47 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 15:19:42 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ t_entry		*get_entry(void)
 			else if (!strncmp(line, "alias:", 6))
 				sample.email = strdup(&line[7]);
 			else if (!strncmp(line, "mobile:", 7))
-				sample.email = strdup(&line[8]);
+				sample.mobile = strdup(&line[8]);
 			else if (!strncmp(line, "jpegPhoto:", 8))
 				sample.picture = set_picture(fd, line);
 		}
