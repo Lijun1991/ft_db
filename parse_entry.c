@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 22:58:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 00:20:26 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 00:49:24 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,17 @@ static void	cleanup(t_entry *entry)
 	}
 }
 
+static int	check_dup(t_data *data, char *p, char *key)
+{
+	while (data)
+	{
+		if (strncmp(data->key, key, p - key) == 0)
+			return (1);
+		data = data->next;
+	}
+	return (0);
+}
+
 t_entry		*parse_entry(t_cmd *cmd)
 {
 	t_entry	*entry;
@@ -63,7 +74,8 @@ t_entry		*parse_entry(t_cmd *cmd)
 			else
 				GOTO(err);
 		}
-		else if ((p = strchr(cmd->argv[i], ':')) && !strchr(p + 1, ':'))
+		else if ((p = strchr(cmd->argv[i], ':')) && p != cmd->argv[i]
+			&& !strchr(p + 1, ':') && !check_dup(entry->data, p, cmd->argv[i]))
 		{
 			*cur = malloc(sizeof(t_data));
 			(*cur)->next = NULL;
