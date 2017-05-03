@@ -6,13 +6,13 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 22:58:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 00:49:24 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 01:10:13 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static void	cleanup(t_entry *entry)
+static void	*cleanup(t_entry *entry)
 {
 	t_data	*data;
 	t_data	*tmp;
@@ -37,6 +37,7 @@ static void	cleanup(t_entry *entry)
 			free(entry->id);
 		free(entry);
 	}
+	return (NULL);
 }
 
 static int	check_dup(t_data *data, char *p, char *key)
@@ -72,7 +73,7 @@ t_entry		*parse_entry(t_cmd *cmd)
 			if (!entry->id && len > 3)
 				entry->id = strdup(&cmd->argv[i][3]);
 			else
-				GOTO(err);
+				return (cleanup(entry));//GOTO(err);
 		}
 		else if ((p = strchr(cmd->argv[i], ':')) && p != cmd->argv[i]
 			&& !strchr(p + 1, ':') && !check_dup(entry->data, p, cmd->argv[i]))
@@ -84,7 +85,7 @@ t_entry		*parse_entry(t_cmd *cmd)
 			cur = &(*cur)->next;
 		}
 		else
-			GOTO(err);
+			return (cleanup(entry));//GOTO(err);
 	}
 	return (entry);
 	err:
