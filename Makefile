@@ -5,7 +5,8 @@ SRC=main.c \
 	db_prompt.c \
 	populate.c \
 	set_entry.c \
-	create.c
+	create.c \
+	parse_entry.c
 OBJ=$(SRC:.c=.o)
 CC=gcc
 CFLAGS=-g -Ilibft -Wall -Wextra

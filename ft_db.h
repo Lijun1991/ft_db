@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 22:01:20 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 00:10:59 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # define READ 2
 # define UPDATE 3
 # define DELETE 4
+# define GOTO(label) goto label
 
 
 typedef struct		s_db
@@ -61,5 +62,7 @@ t_entry				*get_entry(void);
 void				free_cmd(t_cmd *cmd);
 int					db_create(t_db *db, t_entry *entry);
 int					populate(t_db *db);
+t_entry				*parse_entry(t_cmd *cmd);
+void				usage(void);
 
 #endif

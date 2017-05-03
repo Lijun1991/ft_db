@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 22:02:42 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 00:13:13 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,9 @@ static void	cleanup(t_db *db)
 	}
 }
 
-static void	usage(char **argv)
+void		usage(void)
 {
-	ft_fprintf(2, "usage: %s [create | read | update | delete] [key=value]\n",
-				argv[0]);
+	ft_fprintf(2, "usage: ft_db [create | read | update | delete | populate] [key:value]...\n");
 }
 
 int			main(int argc, char **argv)
@@ -56,10 +55,7 @@ int			main(int argc, char **argv)
 	if (db == NULL)
 		exit(1);
 	if (argc > 1)
-	{
-		if ((success = db_exec(db, parse_argv(argc, argv))))
-			usage(argv);
-	}
+		success = db_exec(db, parse_argv(argc, argv));
 	else
 		db_prompt(db);
 	cleanup(db);
