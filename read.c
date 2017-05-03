@@ -12,6 +12,15 @@
 
 #include "ft_db.h"
 
+char	*get_path(char *path, char *name)
+{
+	char *dst;
+
+	dst = ft_strjoin(path, "/");
+	dst = ft_strjoin(dst, name);
+	return (dst);
+}
+
 char		*get_key(char *line, int i)
 {
 	char	**dst;
@@ -23,16 +32,6 @@ char		*get_key(char *line, int i)
 		return (dst[1]);
 	else
 		return (NULL);
-}
-
-char		*id_line(char *id)
-{
-	char	*dst;
-
-	dst = ft_strnew(strlen(id) + 3 + 1);
-	ft_strcpy(dst, "id:");
-	ft_strcpy(dst, id);
-	return (dst);
 }
 
 t_data		*new_lst(char *key, char *value)
@@ -56,44 +55,77 @@ t_data		*new_lst(char *key, char *value)
 	return (new);
 }
 
-void		lst_add(t_data	**data, t_data *new)
+char		*check_id_exit(t_db *db, char *id)
 {
-	new->next = *data;
-	*data = new;
+	struct stat sb;
+	char		*newpath;
+
+	newpath = get_path(db->path, id);
+	if (stat(newpath, &sb) != -1)
+		return (newpath);
+	else
+		return (NULL);
 }
 
-t_entry		*db_read(char *file, char *id)
+t_entry		*db_read(t_db *db, char *id)
 {
-	int		i;
 	int		fd;
 	char	*line;
 	t_entry	*dst;
-	t_data	*new;
+	t_data	**cur;
+	char	*newpath;
 
-	i = 5;//very piece of data have 6 line
 	dst = (t_entry*)malloc(sizeof(t_entry));
-	fd = open("file", O_RDONLY);
-	while (gnl(fd, &line) == 1)
+	memset(dst, 0, sizeof(t_entry));
+	cur = &dst->data;
+	newpath = check_id_exit(db, id);
+	fd = open(newpath, O_RDONLY);
+	if (fd == -1)
 	{
-		if (ft_strcmp(line, id_line(id)) == 0)
-			break ;
+		perror("fd fail");
+		return (NULL);
+	}
+	dst->id = ft_strdup(id);
+	while (gnl(fd, &line))
+	{
+		*cur = new_lst(get_key(line, 1), get_key(line, 2));
+		cur = &(*cur)->next;
 		free(line);
 	}
-	printf("id line is %s\n", line);
-	while (gnl(fd, &line) == 1 && i-- > 0)
-	{
-		new = new_lst(get_key(line, 1), get_key(line, 2));
-		lst_add(&dst->data, new);
-	}
+	close(fd);
 	return (dst);
 }
 
 int			main(int ac, char **av)
 {
-	if (ac == 3)
+	t_db db;
+	t_entry	*result;
+	t_data	*cur;
+
+	if (ac !=2)
+		return (1);
+	db.path = strdup("/nfs/2016/l/lwang/ft_db/db");
+	result = db_read(&db, av[1]);//db, lwang
+	cur = result->data;
+	while (cur)
 	{
-		db_read(av[0], av[1]);//db, lwang
+		ft_printf("%s:%s\n", cur->key, cur->value);
+		cur = cur->next;
 	}
 	return (0);
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
