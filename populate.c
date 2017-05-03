@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 15:57:32 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 22:02:59 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_uid	*get_uids(int *total)
 	return (lst);
 }
 
-int		populate(void)
+int		populate(t_db *db)
 {
 	int		nll;
 	int		i;
@@ -152,7 +152,7 @@ int		populate(void)
 	t_entry	**curentry;
 
 	total = 0;
-	printf("Getting uids...\n");
+	ft_printf("Getting uids...\n");
 	lst = get_uids(&total);
 	if (lst == NULL)
 		return (1);
@@ -160,7 +160,7 @@ int		populate(void)
 	entry = NULL;
 	curentry = &entry;
 	i = 0;
-	printf("Setting entries...\n");
+	ft_printf("Setting entries...\n");
 	while (lst)
 	{
 		status = 0;
@@ -189,6 +189,7 @@ int		populate(void)
 			//printf("Getting entry of: %s\n", lst->uid);
 			ft_printf("Getting entry %*d/%*d\r", len, ++i, len, total);
 			*curentry = get_entry();
+			db_create(db, *curentry);
 			//display_entry(*curentry);
 			//getchar();
 			curentry = &(*curentry)->next;
@@ -203,13 +204,4 @@ int		populate(void)
 	free_entry(entry);
 	//display_entries(entry);
 	return (0);
-}
-
-int		main(void)
-{
-	if (populate())
-	{
-		printf("RIP\n");
-		exit(1);
-	}
 }

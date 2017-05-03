@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 14:14:29 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/02 22:01:20 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define FT_DB_H
 # include "data.h"
 # include "libft.h"
+# include <sys/stat.h>
 # define CREATE 1
 # define READ 2
 # define UPDATE 3
@@ -47,8 +48,18 @@ typedef struct		s_sample
 	char			*picture;
 }					t_sample;
 
-t_crud				*parse_argv(char **argv);
-int					do_operation(t_crud *o);
+typedef struct		s_cmd
+{
+	char			**argv;
+	int				argc;
+}					t_cmd;
+
+t_cmd				*parse_argv(int ac, char **av);
+int					db_exec(t_db *db, t_cmd *cmd);
+void				db_prompt(t_db *db);
 t_entry				*get_entry(void);
+void				free_cmd(t_cmd *cmd);
+int					db_create(t_db *db, t_entry *entry);
+int					populate(t_db *db);
 
 #endif

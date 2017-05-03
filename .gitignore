@@ -1,3 +1,5 @@
+ft_db
+*.swp
 # Object files
 *.o
 *.ko

@@ -6,13 +6,13 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 22:04:40 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/01 23:45:49 by lwang            ###   ########.fr       */
+/*   Updated: 2017/05/02 21:50:41 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-void	write_entry_to_file(t_entry *entry, char *file)
+static int	write_entry_to_file(t_entry *entry, char *file)
 {
 	FILE  	*fptr;
 	t_data	*current;
@@ -20,10 +20,9 @@ void	write_entry_to_file(t_entry *entry, char *file)
 	fptr = fopen(file, "a");
 	if (fptr == NULL)
 	{
-		printf("error");
-		exit(1);
+		perror("fopen");
+		return (1);
 	}
-	fprintf(fptr, "id:%s\n", entry->id);
 	current = entry->data;
 	while (current)
 	{
@@ -31,31 +30,29 @@ void	write_entry_to_file(t_entry *entry, char *file)
 		current = current->next;
 	}
 	fclose(fptr);
+	return (0);
 }
 
 int		db_create(t_db *db, t_entry *entry)
 {
 	char	*file;
-	char	*tmp;
 	struct stat	buf;
+	int		error;
 
-	tmp = ft_strjoin(db->path, "/");
-	file = ft_strjoin(tmp, entry->id);
-	free(tmp);
-	//TODO if file exist, return error, else create it and write entry to it
-	if (stat(file, &buf) == -1)
-		write_entry_to_file(entry, file);
+	error = 0;
+	file = ft_strcjoin(db->path, entry->id, '/');
+	if (stat(file, &buf) == -1 || access(file, R_OK | W_OK))
+		error = write_entry_to_file(entry, file);
 	else
 	{
-		free(file);
-		printf("id exit");
-		return (1);
+		perror("access");
+		error = 1;
 	}
 	free(file);
-	return (0);
+	return (error);
 }
 
-
+/*
 int main()
 {
 	t_db *db;
@@ -84,5 +81,4 @@ int main()
 	db_create(db, entry);
 	return (0);
 }
-
-
+*/
