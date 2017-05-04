@@ -6,13 +6,13 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 15:06:09 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:34:26 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static void		*cleanup(t_entry *lst, char *line, int fd, char *newpath)
+static int		cleanup(t_entry *lst, char *line, int fd, char *newpath)
 {
 	free_entry(lst);
 	if (line)
@@ -21,7 +21,7 @@ static void		*cleanup(t_entry *lst, char *line, int fd, char *newpath)
 		close(fd);
 	if (newpath)
 		free(newpath);
-	return (NULL);
+	return (1);
 }
 
 static t_data	*parse_line(char *line)
@@ -60,18 +60,19 @@ int				check_id_exist(t_db *db, char *id, char **buf)
 	return (0);
 }
 
-t_entry			*db_read(t_db *db, t_entry *entry)
+int				db_read(t_db *db, t_cmd *cmd)
 {
 	int		fd;
 	char	*line;
 	t_entry	*dst;
 	t_data	**cur;
 	char	*newpath;
+	t_entry	*entry;
 
-	if (entry == NULL || entry->id == NULL)
+	if ((entry = parse_entry(cmd)) == NULL || entry->id == NULL)
 	{
 		ft_fprintf(2, "Entry invalid.\n");
-		return (NULL);
+		return (1);
 	}
 	dst = (t_entry*)malloc(sizeof(t_entry));
 	memset(dst, 0, sizeof(t_entry));
@@ -79,7 +80,7 @@ t_entry			*db_read(t_db *db, t_entry *entry)
 	if (!check_id_exist(db, entry->id, &newpath))
 	{
 		ft_fprintf(2, "%s: entry does not exist.\n", entry->id);
-		return (NULL);
+		return (1);
 	}
 	fd = open(newpath, O_RDONLY);
 	if (fd == -1)
@@ -95,8 +96,11 @@ t_entry			*db_read(t_db *db, t_entry *entry)
 			return (cleanup(dst, line, fd, newpath));
 		cur = &(*cur)->next;
 		free(line);
-	}
+	}//TODO CLEANUP
+	display_entry(dst);
+	free_entry(dst);
+	free_entry(entry);
 	free(newpath);
 	close(fd);
-	return (dst);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 22:04:40 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/03 20:46:48 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:27:15 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,14 @@ static int	write_entry_to_file(t_entry *entry, char *file)
 	return (0);
 }
 
-int		db_create(t_db *db, t_entry *entry)
+int		db_create(t_db *db, t_cmd *cmd)
 {
 	char	*file;
 	struct stat	buf;
 	int		error;
+	t_entry	*entry;
 
-	if (entry == NULL)
+	if ((entry = parse_entry(cmd)) == NULL)
 	{
 		ft_fprintf(2, "Entry invalid.\n");
 		return (1);
@@ -54,5 +55,6 @@ int		db_create(t_db *db, t_entry *entry)
 		error = 1;
 	}
 	free(file);
+	free_entry(entry);
 	return (error);
 }

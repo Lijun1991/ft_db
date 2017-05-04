@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 15:06:00 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:28:21 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,22 @@ typedef struct		s_cmd
 	int				argc;
 }					t_cmd;
 
-t_cmd				*parse_argv(int ac, char **av);
 int					db_exec(t_db *db, t_cmd *cmd);
+int					db_create(t_db *db, t_cmd *cmd);
+int					db_read(t_db *db, t_cmd *cmd);
+int					db_update(t_db *db, t_cmd *cmd);
+int					db_delete(t_db *db, t_cmd *cmd);
 void				db_prompt(t_db *db);
+t_cmd				*parse_argv(int ac, char **av);
 t_entry				*get_entry(void);
 void				free_cmd(t_cmd *cmd);
 void				free_entry(t_entry *lst);
-int					db_create(t_db *db, t_entry *entry);
 int					populate(t_db *db);
 t_entry				*parse_entry(t_cmd *cmd);
 void				usage(void);
-t_entry				*db_read(t_db *db, t_entry *entry);
 void				display_entry(t_entry *entry);
-int					db_delete(t_db *db, t_entry *entry);
 int					check_id_exist(t_db *db, char *id, char **buf);
 t_data				*add_data(const char *key, const char *value, t_data ***cur);
-int					db_update(t_db *db, t_cmd *cmd);
 t_uid				*get_uids(t_db *db, int *total);
 
 #endif
