@@ -9,7 +9,8 @@ SRC=main.c \
 	parse_entry.c \
 	cleanup.c \
 	read.c \
-	display.c
+	display.c \
+	db_delete.c
 OBJ=$(SRC:.c=.o)
 CC=gcc
 CFLAGS=-g -Ilibft -Wall -Wextra

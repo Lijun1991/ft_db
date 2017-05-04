@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 22:04:40 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/03 00:17:36 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 20:46:48 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	write_entry_to_file(t_entry *entry, char *file)
 	current = entry->data;
 	while (current)
 	{
-		fprintf(fptr, "%s:%s\n", current->key, current->value);
+		fprintf(fptr, "%s:%s\n", current->key, current->value == NULL ? "" : current->value);
 		current = current->next;
 	}
 	fclose(fptr);

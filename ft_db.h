@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 15:56:46 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 17:41:59 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,7 @@ t_entry				*parse_entry(t_cmd *cmd);
 void				usage(void);
 t_entry				*db_read(t_db *db, t_entry *entry);
 void				display_entry(t_entry *entry);
+int					db_delete(t_db *db, t_entry *entry);
+char				*check_id_exit(t_db *db, char *id);
 
 #endif

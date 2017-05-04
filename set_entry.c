@@ -6,13 +6,27 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 13:26:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 15:19:42 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 21:19:50 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static char	*set_piscine(char *line)
+static t_data	*add_data(const char *key, const char *value, t_data ***cur)
+{
+	t_data	*data;
+
+	data = malloc(sizeof(t_data));
+	memset(data, 0, sizeof(t_data));
+	data->key = strdup(key);
+	if (value && value[0])
+		data->value = strdup(value);
+	**cur = data;
+	*cur = &(**cur)->next;
+	return (data);
+}
+
+static void		set_piscine(char *line, t_data ***cur)
 {
 	char	**s1;
 	char	*piscine;
@@ -45,111 +59,71 @@ static char	*set_piscine(char *line)
 		free(month);
 	if (year)
 		free(year);
-	return (piscine);
+	add_data("piscine", piscine, cur);
+	free(piscine);
 }
 
-static char	*set_picture(int fd, char *line)
+static void		set_picture(int fd, char **line, t_data ***cur)
 {
 	char	*pic;
 	char	*tmp;
 	int		r;
 
-	pic = strdup(&line[12]);
-	while ((r = gnl(fd, &line)) && r != -1)
+	pic = strdup(&(*line)[12]);
+	free(*line);
+	while ((r = gnl(fd, line)) && r != -1)
 	{
-		if (line[0] == ' ')
+		if ((*line)[0] == ' ')
 		{
 			tmp = pic;
-			pic = ft_strjoin(pic, &line[1]);
+			pic = ft_strjoin(pic, &(*line)[1]);
 			free(tmp);
 		}
 		else
-		{
-			free(line);
 			break ;
-		}
-		free(line);
+		free(*line);
 	}
-	return (pic);
+	add_data("picture", pic, cur);
+	free(pic);
 }
 
-static t_entry	*set_entry(t_sample *sample)
+t_entry			*get_entry(void)
 {
-	t_entry	*entry;
-	t_data	*data;
-	t_data	**next;
-
-	entry = malloc(sizeof(t_entry));
-	entry->id = sample->id;
-	entry->next = NULL;
-	next = &entry->data;
-	// Piscine data
-	data = malloc(sizeof(t_data));
-	data->key = strdup("piscine");
-	data->value = sample->piscine;
-	data->next = NULL;
-	*next = data;
-	next = &data->next;
-	// Name data
-	data = malloc(sizeof(t_data));
-	data->key = strdup("name");
-	data->value = sample->name;
-	data->next = NULL;
-	*next = data;
-	next = &data->next;
-	// Mobile data
-	data = malloc(sizeof(t_data));
-	data->key = strdup("mobile");
-	data->value = sample->mobile;
-	data->next = NULL;
-	*next = data;
-	next = &data->next;
-	// Email data
-	data = malloc(sizeof(t_data));
-	data->key = strdup("email");
-	data->value = sample->email;
-	data->next = NULL;
-	*next = data;
-	next = &data->next;
-	// Picture data
-	data = malloc(sizeof(t_data));
-	data->key = strdup("picture");
-	data->value = sample->picture;
-	data->next = NULL;
-	*next = data;
-	return (entry);
-}
-
-t_entry		*get_entry(void)
-{
-	t_sample	sample;
+	t_data		**cur;
+	t_entry		*entry;
 	int			fd;
 	int			r;
 	char		*line;
 
-	memset(&sample, 0, sizeof(t_sample));
-	fd = open("tmp_uidinfo", O_RDONLY);
+	if ((fd = open("tmp_uidinfo", O_RDONLY)) == -1)
+		return (NULL);
+	entry = malloc(sizeof(t_entry));
+	memset(entry, 0, sizeof(t_entry));
+	cur = &entry->data;
 	while ((r = gnl(fd, &line)) && r != -1)
 	{
+		pic:
 		if (!(line[0] == '#' || line[0] == '\0' || !strchr(line, ':')))
 		{
 			if (!strncmp(line, "dn:", 3))
-				sample.piscine = set_piscine(line);
+				set_piscine(line, &cur);
 			else if (!strncmp(line, "cn:", 3))
-				sample.name = strdup(&line[4]);
-			else if (!strncmp(line, "uid:", 4))
-				sample.id = strdup(&line[5]);
+				add_data("name", &line[4], &cur);
+			else if (!entry->id && !strncmp(line, "uid:", 4))
+				entry->id = strdup(&line[5]);
 			else if (!strncmp(line, "alias:", 6))
-				sample.email = strdup(&line[7]);
+				add_data("email", &line[7], &cur);
 			else if (!strncmp(line, "mobile:", 7))
-				sample.mobile = strdup(&line[8]);
+				add_data("mobile", &line[8], &cur);
 			else if (!strncmp(line, "jpegPhoto:", 8))
-				sample.picture = set_picture(fd, line);
+			{
+				set_picture(fd, &line, &cur);
+				GOTO(pic);
+			}
 		}
 		free(line);
 	}
 	close(fd);
 	//unlink("tmp_uidinfo");
-	return (set_entry(&sample));
+	return (entry);
 }
-

@@ -6,13 +6,13 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 15:54:29 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 20:59:07 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static t_uid	*get_uids(int *total)
+static t_uid	*get_uids(t_db *db, int *total)
 {
 	int		fd;
 	int		r;
@@ -56,7 +56,7 @@ static t_uid	*get_uids(int *total)
 				if (av[0])
 				{
 					i = 0;
-					if (strcmp(av[i], "memberUid") == 0 && av[i + 1] && av[i + 1][0])
+					if (strcmp(av[i], "memberUid") == 0 && av[i + 1] && av[i + 1][0] && !check_id_exit(db, &av[i + 1][1]))
 					{
 						*cur = malloc(sizeof(t_uid));
 						(*cur)->uid = strdup(&av[i + 1][1]);
@@ -75,11 +75,10 @@ static t_uid	*get_uids(int *total)
 			//	break ;
 		}
 		close(fd);
-		gnl(-42, NULL);
 	}
 	else
 		return (NULL);
-	//unlink("tmp_uids");
+	unlink("tmp_uids");
 	return (lst);
 }
 
@@ -100,7 +99,7 @@ int				populate(t_db *db)
 
 	total = 0;
 	ft_printf("Getting uids...\n");
-	lst = get_uids(&total);
+	lst = get_uids(db, &total);
 	if (lst == NULL)
 		return (1);
 	len = ft_numlen(total);
@@ -134,7 +133,8 @@ int				populate(t_db *db)
 			if (status)
 				return (-1);
 			//printf("Getting entry of: %s\n", lst->uid);
-			ft_printf("Getting entry %*d/%*d\r", len, ++i, len, total);
+			i++;
+			ft_printf("Getting entry %*d/%*d%c", len, i, len, total, i < total ? '\r' : '\n');
 			*curentry = get_entry();
 			db_create(db, *curentry);
 			//display_entry(*curentry);
@@ -149,6 +149,8 @@ int				populate(t_db *db)
 		free(cur);
 	}
 	free_entry(entry);
+	unlink("tmp_uidinfo");
+	gnl(-42, NULL);
 	//display_entries(entry);
 	return (0);
 }

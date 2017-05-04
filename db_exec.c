@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 20:56:38 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 15:57:35 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 17:37:38 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int		db_exec(t_db *db, t_cmd *cmd)
 	else if (!strcmp(cmd->argv[0], "update"))
 		;
 	else if (!strcmp(cmd->argv[0], "delete"))
-		;
+		success = db_delete(db, input);
 	else if (!strcmp(cmd->argv[0], "populate"))
 		success = populate(db);
 	else

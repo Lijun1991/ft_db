@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 15:55:39 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 19:23:25 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,25 @@ static t_db	*set_db(void)
 {
 	t_db		*db;
 	struct stat	s;
+	char		*path;
+	int			err;
 
-	db = malloc(sizeof(t_db));
-	memset(db, 0, sizeof(t_db));
-	db->path = strdup(getenv("FT_DB_PATH"));
-	if (db->path == NULL || stat(db->path, &s) == -1 || !S_ISDIR(s.st_mode) ||
-			access(db->path, R_OK | W_OK | X_OK))
+	err = 0;
+	db = NULL;
+	path = getenv("FT_DB_PATH");
+	if (path == NULL)
+		err = 1;
+	else if (stat(path, &s) == -1 || !S_ISDIR(s.st_mode) ||
+			access(path, R_OK | W_OK | X_OK))
+		err = 1;
+	else
 	{
-		ft_fprintf(2, "Please set FT_DB_PATH environment variable to a valide folder.\n");
-		free(db);
-		return (NULL);
+		db = malloc(sizeof(t_db));
+		memset(db, 0, sizeof(t_db));
+		db->path = strdup(path);
 	}
+	if (err)
+		ft_fprintf(2, "Please set FT_DB_PATH environment variable to a valide folder.\n");
 	return (db);
 }
 

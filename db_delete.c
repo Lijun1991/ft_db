@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/03 15:22:02 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/03 15:22:05 by lwang            ###   ########.fr       */
+/*   Updated: 2017/05/03 17:39:47 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int		db_delete(t_db *db, t_entry *entry)
 
 	if (!entry->id)
 	{
-		perror("id no exist");
+		ft_fprintf(2, "Invalid entry.\n");
 		return (1);
 	}
 	file = ft_strcjoin(db->path, entry->id, '/');
 	if (stat(file, &sb) == -1)
 	{
+		ft_fprintf(2, "Entry %s does not exist.\n", file);
 		free(file);
-		perror("id no exist");
 		return (1);
 	}
 	ret = remove(file);
@@ -35,17 +35,4 @@ int		db_delete(t_db *db, t_entry *entry)
 	if (ret)
 		perror("remove");
 	return (ret);
-}
-
-int		main(int ac, char **av)
-{
-	t_db	db;
-	t_entry	entry;
-
-	db.path = ft_strdup("/nfs/2016/l/lwang/ft_db/db");
-	entry.id = ft_strdup(av[1]);
-	db_delete(&db, &entry);
-	free(entry.id);
-	free(db.path);
-	return (0);
 }
