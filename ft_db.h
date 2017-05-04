@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 15:40:33 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 16:14:46 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ typedef struct		s_cmd
 }					t_cmd;
 
 int					db_exec(t_db *db, t_cmd *cmd);
-int					db_create(t_db *db, t_cmd *cmd);
-int					db_read(t_db *db, t_cmd *cmd);
+int					db_create(t_db *db, t_entry *entry);
+int					db_read(t_db *db, t_entry *entry);
 int					db_update(t_db *db, t_cmd *cmd);
-int					db_delete(t_db *db, t_cmd *cmd);
+int					db_delete(t_db *db, t_entry *entry);
 void				db_prompt(t_db *db);
 t_cmd				*parse_argv(int ac, char **av);
 t_entry				*get_entry(void);

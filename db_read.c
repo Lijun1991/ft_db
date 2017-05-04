@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 15:39:39 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 16:13:55 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,15 @@ int				check_id_exist(t_db *db, char *id, char **buf)
 	return (0);
 }
 
-int				db_read(t_db *db, t_cmd *cmd)
+int				db_read(t_db *db, t_entry *entry)
 {
 	int		fd;
 	char	*line;
 	t_entry	*dst;
 	t_data	**cur;
 	char	*newpath;
-	t_entry	*entry;
 
-	if ((entry = parse_entry(cmd)) == NULL || entry->id == NULL)
+	if (entry == NULL || entry->id == NULL)
 	{
 		ft_fprintf(2, "Entry invalid.\n");
 		return (1);
@@ -99,7 +98,6 @@ int				db_read(t_db *db, t_cmd *cmd)
 	}//TODO CLEANUP
 	display_entry(dst);
 	free_entry(dst);
-	free_entry(entry);
 	free(newpath);
 	close(fd);
 	return (0);
