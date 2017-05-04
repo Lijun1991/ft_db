@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 00:13:13 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 15:55:39 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_db	*set_db(void)
 	return (db);
 }
 
-static void	cleanup(t_db *db)
+static void	cleanup(t_db *db, t_cmd *cmd)
 {
 	if (db)
 	{
@@ -38,6 +38,7 @@ static void	cleanup(t_db *db)
 			free(db->path);
 		free(db);
 	}
+	free_cmd(cmd);
 }
 
 void		usage(void)
@@ -48,16 +49,21 @@ void		usage(void)
 int			main(int argc, char **argv)
 {
 	t_db	*db;
+	t_cmd	*cmd;
 	int		success;
 
 	success = 0;
+	cmd = NULL;
 	db = set_db();
 	if (db == NULL)
 		exit(1);
 	if (argc > 1)
-		success = db_exec(db, parse_argv(argc, argv));
+	{
+		cmd = parse_argv(argc, argv);
+		success = db_exec(db, cmd);
+	}
 	else
 		db_prompt(db);
-	cleanup(db);
+	cleanup(db, cmd);
 	return (success);
 }

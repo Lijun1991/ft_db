@@ -6,7 +6,10 @@ SRC=main.c \
 	populate.c \
 	set_entry.c \
 	create.c \
-	parse_entry.c
+	parse_entry.c \
+	cleanup.c \
+	read.c \
+	display.c
 OBJ=$(SRC:.c=.o)
 CC=gcc
 CFLAGS=-g -Ilibft -Wall -Wextra

@@ -6,66 +6,13 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 22:02:59 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 15:54:29 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-void	free_entry(t_entry *entry)
-{
-	t_entry	*tmpentry;
-	t_data	*data;
-	t_data	*tmpdata;
-
-	while (entry)
-	{
-		tmpentry = entry->next;
-		data = entry->data;
-		while (data)
-		{
-			tmpdata = data->next;
-			if (data->key)
-				free(data->key);
-			if (data->value)
-				free(data->value);
-			free(data);
-			data = tmpdata;
-		}
-		free(entry->id);
-		free(entry);
-		entry = tmpentry;
-	}
-}
-
-void	display_entry(t_entry *entry)
-{
-	t_data	*c;
-
-	printf("%s:\n", entry->id);
-	c = entry->data;
-	while (c)
-	{
-		if (!strcmp(c->key, "picture"))
-			printf("%s: \033]1337;File=inline=1:%s:\a\n", c->key, c->value);
-		else
-			printf("%s: %s\n", c->key, c->value);
-		c = c->next;
-	}
-	printf("\n");
-}
-
-void	display_entries(t_entry *lst)
-{
-	while (lst)
-	{
-		display_entry(lst);
-		lst = lst->next;
-		getchar();
-	}
-}
-
-t_uid	*get_uids(int *total)
+static t_uid	*get_uids(int *total)
 {
 	int		fd;
 	int		r;
@@ -124,8 +71,8 @@ t_uid	*get_uids(int *total)
 				free(av);
 			}
 			free(line);
-			if (total && *total == 10)
-				break ;
+			//if (total && *total == 10)
+			//	break ;
 		}
 		close(fd);
 		gnl(-42, NULL);
@@ -136,7 +83,7 @@ t_uid	*get_uids(int *total)
 	return (lst);
 }
 
-int		populate(t_db *db)
+int				populate(t_db *db)
 {
 	int		nll;
 	int		i;

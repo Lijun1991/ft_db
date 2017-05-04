@@ -6,68 +6,54 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/02 01:39:33 by lwang            ###   ########.fr       */
+/*   Updated: 2017/05/03 17:29:02 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-char	*get_path(char *path, char *name)
+static void		*cleanup(t_entry *lst, char *line, int fd, char *newpath)
 {
-	char *dst;
-
-	dst = ft_strjoin(path, "/");
-	dst = ft_strjoin(dst, name);
-	return (dst);
+	free_entry(lst);
+	if (line)
+		free(line);
+	if (fd > 0)
+		close(fd);
+	if (newpath)
+		free(newpath);
+	return (NULL);
 }
 
-char		*get_key(char *line, int i)
+static t_data	*parse_line(char *line)
 {
-	char	**dst;
+	char	*p;
+	t_data	*data;
 
-	dst = ft_strsplit(line, ':');
-	if (i == 1)
-		return (dst[0]);
-	else if (i == 2)
-		return (dst[1]);
-	else
-		return (NULL);
-}
-
-t_data		*new_lst(char *key, char *value)
-{
-	t_data	*new;
-
-	new = (t_data*)malloc(sizeof(t_data));
-	if (!new)
-		return (NULL);
-	if (!key)
+	if ((p = strchr(line, ':')) && p > line && !strchr(p + 1, ':'))
 	{
-		new->key = NULL;
-		new->value = NULL;
+		data = malloc(sizeof(t_data));
+		data->next = NULL;
+		data->key = strndup(line, p - line);
+		data->value = strdup(p + 1);
+		return (data);
 	}
-	else
-	{
-		new->key = strdup(key);
-		new->value = strdup(value);
-	}
-	new->next = NULL;
-	return (new);
+	return (NULL);
 }
 
-char		*check_id_exit(t_db *db, char *id)
+static char		*check_id_exit(t_db *db, char *id)
 {
 	struct stat sb;
 	char		*newpath;
 
-	newpath = get_path(db->path, id);
+	newpath = ft_strcjoin(db->path, id, '/');
 	if (stat(newpath, &sb) != -1)
 		return (newpath);
-	else
-		return (NULL);
+	free(newpath);
+	ft_fprintf(2, "%s: entry does not exist.\n", id);
+	return (NULL);
 }
 
-t_entry		*db_read(t_db *db, char *id)
+t_entry			*db_read(t_db *db, t_entry *entry)
 {
 	int		fd;
 	char	*line;
@@ -75,57 +61,32 @@ t_entry		*db_read(t_db *db, char *id)
 	t_data	**cur;
 	char	*newpath;
 
+	if (entry == NULL || entry->id == NULL)
+	{
+		ft_fprintf(2, "Entry invalid.\n");
+		return (NULL);
+	}
 	dst = (t_entry*)malloc(sizeof(t_entry));
 	memset(dst, 0, sizeof(t_entry));
 	cur = &dst->data;
-	newpath = check_id_exit(db, id);
+	if (!(newpath = check_id_exit(db, entry->id)))
+		return (NULL);
 	fd = open(newpath, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("fd fail");
-		return (NULL);
+		ft_fprintf(2, "Unable to open file: %s.\n", newpath);
+		return (cleanup(dst, NULL, 0, newpath));
 	}
-	dst->id = ft_strdup(id);
+	dst->id = ft_strdup(entry->id);
 	while (gnl(fd, &line))
 	{
-		*cur = new_lst(get_key(line, 1), get_key(line, 2));
+		*cur = parse_line(line);
+		if (*cur == NULL)
+			return (cleanup(dst, line, fd, newpath));
 		cur = &(*cur)->next;
 		free(line);
 	}
+	free(newpath);
 	close(fd);
 	return (dst);
 }
-
-int			main(int ac, char **av)
-{
-	t_db db;
-	t_entry	*result;
-	t_data	*cur;
-
-	if (ac !=2)
-		return (1);
-	db.path = strdup("/nfs/2016/l/lwang/ft_db/db");
-	result = db_read(&db, av[1]);//db, lwang
-	cur = result->data;
-	while (cur)
-	{
-		ft_printf("%s:%s\n", cur->key, cur->value);
-		cur = cur->next;
-	}
-	return (0);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

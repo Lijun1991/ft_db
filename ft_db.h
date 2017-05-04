@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 00:10:59 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/03 15:56:46 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,12 @@ int					db_exec(t_db *db, t_cmd *cmd);
 void				db_prompt(t_db *db);
 t_entry				*get_entry(void);
 void				free_cmd(t_cmd *cmd);
+void				free_entry(t_entry *lst);
 int					db_create(t_db *db, t_entry *entry);
 int					populate(t_db *db);
 t_entry				*parse_entry(t_cmd *cmd);
 void				usage(void);
+t_entry				*db_read(t_db *db, t_entry *entry);
+void				display_entry(t_entry *entry);
 
 #endif
