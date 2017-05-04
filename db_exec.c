@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 20:56:38 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 15:35:19 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:41:30 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			db_exec(t_db *db, t_cmd *cmd)
 	c = cmd->argv[0];
 	success = 0;
 	if (!ft_strcmp(c, "populate"))
-		success = populate(db);
+		success = db_populate(db);
 	else if (!ft_strcmp(c, "create"))
 		success = db_create(db, cmd);
 	else if (!ft_strcmp(c, "read"))

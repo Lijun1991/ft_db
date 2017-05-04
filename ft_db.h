@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 15:28:21 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:40:33 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_cmd				*parse_argv(int ac, char **av);
 t_entry				*get_entry(void);
 void				free_cmd(t_cmd *cmd);
 void				free_entry(t_entry *lst);
-int					populate(t_db *db);
+int					db_populate(t_db *db);
 t_entry				*parse_entry(t_cmd *cmd);
 void				usage(void);
 void				display_entry(t_entry *entry);

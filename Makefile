@@ -3,12 +3,12 @@ SRC = main.c \
 	parse_argv.c \
 	db_exec.c \
 	db_prompt.c \
-	populate.c \
+	db_populate.c \
 	set_entry.c \
-	create.c \
+	db_create.c \
 	parse_entry.c \
 	cleanup.c \
-	read.c \
+	db_read.c \
 	display.c \
 	db_delete.c \
 	db_update.c \
