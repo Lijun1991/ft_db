@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 00:07:45 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:06:00 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,9 @@ void				usage(void);
 t_entry				*db_read(t_db *db, t_entry *entry);
 void				display_entry(t_entry *entry);
 int					db_delete(t_db *db, t_entry *entry);
-char				*check_id_exit(t_db *db, char *id);
+int					check_id_exist(t_db *db, char *id, char **buf);
 t_data				*add_data(const char *key, const char *value, t_data ***cur);
 int					db_update(t_db *db, t_cmd *cmd);
+t_uid				*get_uids(t_db *db, int *total);
 
 #endif

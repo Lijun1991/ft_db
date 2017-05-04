@@ -11,7 +11,8 @@ SRC = main.c \
 	read.c \
 	display.c \
 	db_delete.c \
-	db_update.c
+	db_update.c \
+	get_uids.c
 OBJ = $(SRC:.c=.o)
 CC = gcc
 CFLAGS = -g -Ilibft -Wall -Wextra

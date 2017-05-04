@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/03 19:34:37 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 15:06:09 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,24 @@ static t_data	*parse_line(char *line)
 	return (NULL);
 }
 
-char			*check_id_exit(t_db *db, char *id)
+int				check_id_exist(t_db *db, char *id, char **buf)
 {
 	struct stat sb;
 	char		*newpath;
 
 	newpath = ft_strcjoin(db->path, id, '/');
 	if (stat(newpath, &sb) != -1)
-		return (newpath);
+	{
+		if (buf)
+		{
+			*buf = newpath;
+			return (1);
+		}
+		free(newpath);
+		return (1);
+	}
 	free(newpath);
-	return (NULL);
+	return (0);
 }
 
 t_entry			*db_read(t_db *db, t_entry *entry)
@@ -68,7 +76,7 @@ t_entry			*db_read(t_db *db, t_entry *entry)
 	dst = (t_entry*)malloc(sizeof(t_entry));
 	memset(dst, 0, sizeof(t_entry));
 	cur = &dst->data;
-	if (!(newpath = check_id_exit(db, entry->id)))
+	if (!check_id_exist(db, entry->id, &newpath))
 	{
 		ft_fprintf(2, "%s: entry does not exist.\n", entry->id);
 		return (NULL);
