@@ -6,13 +6,13 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 16:13:55 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 16:26:08 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static int		cleanup(t_entry *lst, char *line, int fd, char *newpath)
+static void		*cleanup(t_entry *lst, char *line, int fd, char *newpath)
 {
 	free_entry(lst);
 	if (line)
@@ -21,7 +21,7 @@ static int		cleanup(t_entry *lst, char *line, int fd, char *newpath)
 		close(fd);
 	if (newpath)
 		free(newpath);
-	return (1);
+	return (NULL);
 }
 
 static t_data	*parse_line(char *line)
@@ -60,7 +60,7 @@ int				check_id_exist(t_db *db, char *id, char **buf)
 	return (0);
 }
 
-int				db_read(t_db *db, t_entry *entry)
+t_entry			*db_read(t_db *db, t_entry *entry)
 {
 	int		fd;
 	char	*line;
@@ -71,7 +71,7 @@ int				db_read(t_db *db, t_entry *entry)
 	if (entry == NULL || entry->id == NULL)
 	{
 		ft_fprintf(2, "Entry invalid.\n");
-		return (1);
+		return (NULL);
 	}
 	dst = (t_entry*)malloc(sizeof(t_entry));
 	memset(dst, 0, sizeof(t_entry));
@@ -79,7 +79,7 @@ int				db_read(t_db *db, t_entry *entry)
 	if (!check_id_exist(db, entry->id, &newpath))
 	{
 		ft_fprintf(2, "%s: entry does not exist.\n", entry->id);
-		return (1);
+		return (NULL);
 	}
 	fd = open(newpath, O_RDONLY);
 	if (fd == -1)
@@ -96,9 +96,7 @@ int				db_read(t_db *db, t_entry *entry)
 		cur = &(*cur)->next;
 		free(line);
 	}//TODO CLEANUP
-	display_entry(dst);
-	free_entry(dst);
 	free(newpath);
 	close(fd);
-	return (0);
+	return (dst);
 }
