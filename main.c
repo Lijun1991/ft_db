@@ -71,7 +71,8 @@ int			main(int argc, char **argv)
 		success = db_exec(db, cmd);
 	}
 	else
-		db_prompt(db);
+		usage();
+		// db_prompt(db);
 	cleanup(db, cmd);
 	return (success);
 }

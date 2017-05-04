@@ -12,6 +12,6 @@
 
 #include "ft_db.h"
 
-void	db_prompt(t_db *db)
-{
-}
+// void	db_prompt(t_db *db)
+// {
+// }
