@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/03 21:22:32 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 01:19:16 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 01:25:29 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,6 @@ int				db_update(t_db *db, t_cmd *cmd)
 	free_entry(up);
 	free_entry(del);
 	free_entry(file);
+	free_entry(entry);
 	return (err);
 }
