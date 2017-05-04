@@ -1,5 +1,5 @@
-NAME=ft_db
-SRC=main.c \
+NAME = ft_db
+SRC = main.c \
 	parse_argv.c \
 	db_exec.c \
 	db_prompt.c \
@@ -12,27 +12,23 @@ SRC=main.c \
 	display.c \
 	db_delete.c \
 	db_update.c
-OBJ=$(SRC:.c=.o)
-CC=gcc
-CFLAGS=-g -Ilibft -Wall -Wextra
-.PHONY: all clean fclean re
+OBJ = $(SRC:.c=.o)
+CC = gcc
+CFLAGS = -g -Ilibft -Wall -Wextra
+
+
+$(NAME): $(OBJ)
+	make -C ./libft
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L libft/ -lft
 
 all: $(NAME)
 
-$(NAME): libft $(OBJ)
-	$(CC) $(OBJ) $(CFLAGS) -Llibft -lft -o $(NAME)
-
-$(OBJ): ft_db.h
-
-libft:
-	make -C libft
-
 clean:
-	make -C libft clean
-	rm -rf $(OBJ)
+	make -C ./libft clean
+	rm -f $(OBJ)
 
-fclean: clean
-	make -C libft fclean
-	rm -rf $(NAME)
+fclean:
+	make -C ./libft fclean
+	rm -f $(OBJ) $(NAME)
 
-re: fclean all
+re: fclean $(NAME)
