@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/03 15:53:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 15:54:15 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 01:46:24 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	display_entry(t_entry *entry)
 {
 	t_data	*c;
 
-	printf("%s:\n", entry->id);
+	printf("id: %s\n", entry->id);
 	c = entry->data;
 	while (c)
 	{
