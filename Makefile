@@ -10,7 +10,8 @@ SRC=main.c \
 	cleanup.c \
 	read.c \
 	display.c \
-	db_delete.c
+	db_delete.c \
+	db_update.c
 OBJ=$(SRC:.c=.o)
 CC=gcc
 CFLAGS=-g -Ilibft -Wall -Wextra

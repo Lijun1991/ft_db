@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 22:58:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 01:10:13 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 00:42:11 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ t_entry		*parse_entry(t_cmd *cmd)
 	i = 0;
 	while (cmd->argv[++i])
 	{
-		len = strlen(cmd->argv[i]);
+		len = ft_strlen(cmd->argv[i]);
 		if (!strncmp(cmd->argv[i], "id:", 3) && !strchr(&cmd->argv[i][3], ':'))
 		{
 			if (!entry->id && len > 3)
 				entry->id = strdup(&cmd->argv[i][3]);
 			else
-				return (cleanup(entry));//GOTO(err);
+				return (cleanup(entry));
 		}
 		else if ((p = strchr(cmd->argv[i], ':')) && p != cmd->argv[i]
 			&& !strchr(p + 1, ':') && !check_dup(entry->data, p, cmd->argv[i]))
@@ -85,10 +85,7 @@ t_entry		*parse_entry(t_cmd *cmd)
 			cur = &(*cur)->next;
 		}
 		else
-			return (cleanup(entry));//GOTO(err);
+			return (cleanup(entry));
 	}
 	return (entry);
-	err:
-	cleanup(entry);
-	return (NULL);
 }

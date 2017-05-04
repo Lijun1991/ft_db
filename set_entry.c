@@ -6,13 +6,13 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 13:26:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 21:19:50 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 00:03:52 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_db.h"
 
-static t_data	*add_data(const char *key, const char *value, t_data ***cur)
+t_data			*add_data(const char *key, const char *value, t_data ***cur)
 {
 	t_data	*data;
 

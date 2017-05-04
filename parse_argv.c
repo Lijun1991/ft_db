@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 20:52:12 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/02 21:07:34 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 00:44:23 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_cmd	*parse_argv(int ac, char **av)
 	i = 0;
 	while (*++av)
 	{
-		cmd->argv[i++] = strdup(*av);
+		cmd->argv[i++] = ft_strdup(*av);
 		cmd->argc++;
 	}
 	cmd->argv[i] = NULL;
