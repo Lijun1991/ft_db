@@ -1,4 +1,7 @@
 ft_db
+test*
+tags
+db/
 *.swp
 # Object files
 *.o
