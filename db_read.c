@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/05 01:13:13 by lwang            ###   ########.fr       */
+/*   Updated: 2017/05/05 15:38:23 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,12 @@ t_entry			*db_read(t_db *db, t_entry *entry)
 	if (!check_id_exist(db, entry->id, &newpath))
 	{
 		ft_fprintf(2, "%s: entry does not exist.\n", entry->id);
+		return (NULL);
+	}
+	if (get_file_size(newpath) > MAX_ENTRY_SIZE)
+	{
+		free(newpath);
+		ft_fprintf(2, "%s: entry is too large, please delete it.\n", entry->id);
 		return (NULL);
 	}
 	dst = read_file(newpath, entry);

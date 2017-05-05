@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 01:13:31 by lwang            ###   ########.fr       */
+/*   Updated: 2017/05/05 15:51:55 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int			main(int argc, char **argv)
 		exit(1);
 	if (argc > 1)
 	{
-		cmd = parse_argv(argc, argv);
+		if ((cmd = parse_argv(argc, argv)) == NULL)
+			exit(1);
 		success = db_exec(db, cmd);
 	}
 	else

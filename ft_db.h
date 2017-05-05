@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 00:18:11 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 15:53:12 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 # include "data.h"
 # include "libft.h"
 # include <sys/stat.h>
+# define MAX_ENTRY_SIZE 100000
+# define MAX_ARGC 1000
 
 typedef struct		s_db
 {
@@ -51,6 +53,7 @@ int					check_id_exist(t_db *db, char *id, char **buf);
 t_data				*add_data(const char *key, const char *value,
 					t_data ***cur);
 t_uid				*get_uids(t_db *db, int *total);
+int					get_file_size(const char *path);
 
 /*
 ** Data functions

@@ -16,7 +16,7 @@ SRC = main.c \
 	  data.c
 OBJ = $(SRC:.c=.o)
 	CC = gcc
-	CFLAGS = -g -Ilibft -Wall -Wextra
+	CFLAGS = -g -Ilibft -Wall -Wextra -Werror
 
 
 $(NAME): $(OBJ)
@@ -24,6 +24,8 @@ $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L libft/ -lft
 
 all: $(NAME)
+
+$(OBJ): ft_db.h
 
 clean:
 	make -C ./libft clean
