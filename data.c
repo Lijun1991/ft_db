@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/04 22:36:10 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 23:08:53 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 23:53:33 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,23 @@ void	free_data(t_data **data)
 			*data = NULL;
 		}
 	}
+}
+
+t_data	*add_data(const char *key, const char *value, t_data ***cur)
+{
+	t_data	*data;
+
+	data = malloc(sizeof(t_data));
+	memset(data, 0, sizeof(t_data));
+	data->key = strdup(key);
+	if (value && value[0])
+		data->value = strdup(value);
+	if (cur)
+	{
+		**cur = data;
+		*cur = &(**cur)->next;
+	}
+	return (data);
 }
 
 t_data	*parse_data(const char *s)

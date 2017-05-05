@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 22:56:41 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 23:53:09 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,33 +21,16 @@
 # define DELETE 4
 # define GOTO(label) goto label
 
-
 typedef struct		s_db
 {
 	char			*path;
 }					t_db;
-
-typedef struct		s_crud
-{
-	int				type;
-	t_entry			*entry;
-}					t_crud;
 
 typedef struct		s_uid
 {
 	char			*uid;
 	struct s_uid	*next;
 }					t_uid;
-
-typedef struct		s_sample
-{
-	char			*id;
-	char			*piscine;
-	char			*name;
-	char			*mobile;
-	char			*email;
-	char			*picture;
-}					t_sample;
 
 typedef struct		s_cmd
 {
@@ -70,7 +53,8 @@ t_entry				*parse_entry(t_cmd *cmd);
 void				usage(void);
 void				display_entry(t_entry *entry);
 int					check_id_exist(t_db *db, char *id, char **buf);
-t_data				*add_data(const char *key, const char *value, t_data ***cur);
+t_data				*add_data(const char *key, const char *value,
+					t_data ***cur);
 t_uid				*get_uids(t_db *db, int *total);
 int					check_dup(t_data *data, char *p, char *key);
 
@@ -78,9 +62,9 @@ int					check_dup(t_data *data, char *p, char *key);
 ** Data functions
 */
 
-void	free_data(t_data **data);
-t_data	*parse_data(const char *s);
-int		insert_data(t_entry *entry, t_data *data);
-int		remove_data(t_entry *entry, t_data *data);
+void				free_data(t_data **data);
+t_data				*parse_data(const char *s);
+int					insert_data(t_entry *entry, t_data *data);
+int					remove_data(t_entry *entry, t_data *data);
 
 #endif
