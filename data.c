@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/04 22:36:10 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 23:53:33 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:32:20 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ void	free_data(t_data **data)
 	{
 		if (*data)
 		{
-			if ((*data)->key)
-				free((*data)->key);
-			if ((*data)->value)
-				free((*data)->value);
+			free((*data)->key);
+			free((*data)->value);
 			free(*data);
 			*data = NULL;
 		}
@@ -91,7 +89,7 @@ int		remove_data(t_entry *entry, t_data *data)
 
 	if (entry == NULL || data == NULL)
 		return (1);
-	cur = data;
+	cur = entry->data;
 	old = cur;
 	while (cur)
 	{
