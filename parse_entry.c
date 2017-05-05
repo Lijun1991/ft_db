@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 22:58:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 20:42:14 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:13:57 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,53 @@ static void	*cleanup(t_entry *entry)
 			while (data)
 			{
 				tmp = data->next;
-				if (data->key)
-					free(data->key);
-				if (data->value)
-					free(data->value);
+				free(data->key);
+				free(data->value);
 				free(data);
 				data = tmp;
 			}
 		}
-		if (entry->id)
-			free(entry->id);
+		free(entry->id);
 		free(entry);
 	}
 	return (NULL);
 }
 
-int			check_dup(t_data *data, char *p, char *key)
+static int	check_dup(t_data *data, char *p, char *key)
 {
 	while (data)
 	{
-		if (strncmp(data->key, key, p - key) == 0)
+		if (ft_strncmp(data->key, key, p - key) == 0)
 			return (1);
 		data = data->next;
 	}
+	return (0);
+}
+
+static int	parse_argument(char *av, t_entry *entry, t_data ***cur)
+{
+	int		len;
+	char	*p;
+
+	len = ft_strlen(av);
+	if (!ft_strncmp(av, "id:", 3) && !ft_strchr(&av[3], ':'))
+	{
+		if (!entry->id && len > 3)
+			entry->id = ft_strdup(&av[3]);
+		else
+			return (1);
+	}
+	else if ((p = ft_strchr(av, ':')) && p != av
+		&& !ft_strchr(p + 1, ':') && !check_dup(entry->data, p, av))
+	{
+		**cur = malloc(sizeof(t_data));
+		(**cur)->next = NULL;
+		(**cur)->key = ft_strndup(av, p - av);
+		(**cur)->value = ft_strdup(p + 1);
+		*cur = &(**cur)->next;
+	}
+	else
+		return (1);
 	return (0);
 }
 
@@ -56,36 +80,15 @@ t_entry		*parse_entry(t_cmd *cmd)
 	t_entry	*entry;
 	t_data	**cur;
 	int		i;
-	int		len;
-	char	*p;
 
 	if (!cmd || !cmd->argv[0])
 		return (NULL);
 	entry = malloc(sizeof(t_entry));
-	memset(entry, 0, sizeof(t_entry));
+	ft_memset(entry, 0, sizeof(t_entry));
 	cur = &entry->data;
 	i = 0;
 	while (cmd->argv[++i])
-	{
-		len = ft_strlen(cmd->argv[i]);
-		if (!strncmp(cmd->argv[i], "id:", 3) && !strchr(&cmd->argv[i][3], ':'))
-		{
-			if (!entry->id && len > 3)
-				entry->id = strdup(&cmd->argv[i][3]);
-			else
-				return (cleanup(entry));
-		}
-		else if ((p = strchr(cmd->argv[i], ':')) && p != cmd->argv[i]
-			&& !strchr(p + 1, ':') && !check_dup(entry->data, p, cmd->argv[i]))
-		{
-			*cur = malloc(sizeof(t_data));
-			(*cur)->next = NULL;
-			(*cur)->key = strndup(cmd->argv[i], p - cmd->argv[i]);
-			(*cur)->value = strdup(p + 1);
-			cur = &(*cur)->next;
-		}
-		else
+		if (parse_argument(cmd->argv[i], entry, &cur))
 			return (cleanup(entry));
-	}
 	return (entry);
 }

@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 23:53:09 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:07:29 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int					check_id_exist(t_db *db, char *id, char **buf);
 t_data				*add_data(const char *key, const char *value,
 					t_data ***cur);
 t_uid				*get_uids(t_db *db, int *total);
-int					check_dup(t_data *data, char *p, char *key);
 
 /*
 ** Data functions
