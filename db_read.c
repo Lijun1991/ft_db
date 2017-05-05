@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 16:26:08 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 19:36:25 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,38 @@ int				check_id_exist(t_db *db, char *id, char **buf)
 	return (0);
 }
 
-t_entry			*db_read(t_db *db, t_entry *entry)
+static t_entry	*read_file(char *path, t_entry *entry)
 {
 	int		fd;
+	int		r;
 	char	*line;
 	t_entry	*dst;
 	t_data	**cur;
+
+	dst = (t_entry*)malloc(sizeof(t_entry));
+	memset(dst, 0, sizeof(t_entry));
+	cur = &dst->data;
+	if ((fd = open(path, O_RDONLY)) == -1)
+	{
+		ft_fprintf(2, "Unable to open file: %s.\n", path);
+		return (cleanup(dst, NULL, 0, NULL));
+	}
+	dst->id = ft_strdup(entry->id);
+	while ((r = gnl(fd, &line)) && r != -1)
+	{
+		*cur = parse_line(line);
+		if (*cur == NULL)
+			return (cleanup(dst, NULL, fd, NULL));
+		cur = &(*cur)->next;
+		free(line);
+	}
+	close(fd);
+	return (dst);
+}
+
+t_entry			*db_read(t_db *db, t_entry *entry)
+{
+	t_entry	*dst;
 	char	*newpath;
 
 	if (entry == NULL || entry->id == NULL)
@@ -73,30 +99,12 @@ t_entry			*db_read(t_db *db, t_entry *entry)
 		ft_fprintf(2, "Entry invalid.\n");
 		return (NULL);
 	}
-	dst = (t_entry*)malloc(sizeof(t_entry));
-	memset(dst, 0, sizeof(t_entry));
-	cur = &dst->data;
 	if (!check_id_exist(db, entry->id, &newpath))
 	{
 		ft_fprintf(2, "%s: entry does not exist.\n", entry->id);
 		return (NULL);
 	}
-	fd = open(newpath, O_RDONLY);
-	if (fd == -1)
-	{
-		ft_fprintf(2, "Unable to open file: %s.\n", newpath);
-		return (cleanup(dst, NULL, 0, newpath));
-	}
-	dst->id = ft_strdup(entry->id);
-	while (gnl(fd, &line))
-	{
-		*cur = parse_line(line);
-		if (*cur == NULL)
-			return (cleanup(dst, line, fd, newpath));
-		cur = &(*cur)->next;
-		free(line);
-	}//TODO CLEANUP
-	free(newpath);
-	close(fd);
+	dst = read_file(newpath, entry);
+	cleanup(NULL, NULL, 0, newpath);
 	return (dst);
 }

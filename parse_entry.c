@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 22:58:41 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 00:42:11 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 20:42:14 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	*cleanup(t_entry *entry)
 	return (NULL);
 }
 
-static int	check_dup(t_data *data, char *p, char *key)
+int			check_dup(t_data *data, char *p, char *key)
 {
 	while (data)
 	{
