@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 16:16:57 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:02:49 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,7 @@ int				db_populate(t_db *db)
 
 	total = 0;
 	if ((lst = get_uids(db, &total)) == NULL)
-	{
-		ft_fprintf(2, "No uid to fetch.\n");
-		return (1);
-	}
+		return (ft_fprintf(2, "No uid to fetch.\n"));
 	i = 0;
 	while (lst)
 	{

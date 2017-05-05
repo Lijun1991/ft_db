@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/03 19:23:25 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:03:45 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ static t_db	*set_db(void)
 		db->path = strdup(path);
 	}
 	if (err)
-		ft_fprintf(2, "Please set FT_DB_PATH environment variable to a valide folder.\n");
+		ft_fprintf(2,
+			"Please set FT_DB_PATH environment variable to a valide folder.\n");
 	return (db);
 }
 
@@ -51,7 +52,8 @@ static void	cleanup(t_db *db, t_cmd *cmd)
 
 void		usage(void)
 {
-	ft_fprintf(2, "usage: ft_db [create | read | update | delete | populate] [key:value]...\n");
+	ft_fprintf(2, "usage: ft_db [create | read | update | delete | populate]" \
+					"[key:value]...\n");
 }
 
 int			main(int argc, char **argv)
@@ -72,7 +74,6 @@ int			main(int argc, char **argv)
 	}
 	else
 		usage();
-		// db_prompt(db);
 	cleanup(db, cmd);
 	return (success);
 }

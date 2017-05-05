@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 22:04:40 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 16:15:25 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/04 23:59:51 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	write_entry_to_file(t_entry *entry, char *file)
 {
-	FILE  	*fptr;
+	FILE	*fptr;
 	t_data	*current;
 
 	fptr = fopen(file, "w");
@@ -26,18 +26,19 @@ static int	write_entry_to_file(t_entry *entry, char *file)
 	current = entry->data;
 	while (current)
 	{
-		fprintf(fptr, "%s:%s\n", current->key, current->value == NULL ? "" : current->value);
+		fprintf(fptr, "%s:%s\n", current->key, current->value == NULL ? "" :
+				current->value);
 		current = current->next;
 	}
 	fclose(fptr);
 	return (0);
 }
 
-int		db_create(t_db *db, t_entry *entry)
+int			db_create(t_db *db, t_entry *entry)
 {
-	char	*file;
+	char		*file;
 	struct stat	buf;
-	int		error;
+	int			error;
 
 	if (entry == NULL || entry->id == NULL)
 	{
