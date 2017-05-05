@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:25:20 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 00:07:29 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:18:11 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,6 @@
 # include "data.h"
 # include "libft.h"
 # include <sys/stat.h>
-# define CREATE 1
-# define READ 2
-# define UPDATE 3
-# define DELETE 4
-# define GOTO(label) goto label
 
 typedef struct		s_db
 {
