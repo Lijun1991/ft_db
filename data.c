@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/04 22:36:10 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 00:32:20 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 00:36:10 by varnaud          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ t_data	*parse_data(const char *s)
 	char	*p;
 	t_data	*data;
 
+	if (s == NULL)
+		return (NULL);
 	if (!(p = ft_strchr(s, ':')) || p == s || ft_strchr(p + 1, ':'))
 		return (NULL);
 	data = malloc(sizeof(t_data));
