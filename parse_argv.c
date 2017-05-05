@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 20:52:12 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/04 00:44:23 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 01:08:12 by lwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_cmd	*parse_argv(int ac, char **av)
 	int		i;
 
 	cmd = malloc(sizeof(t_cmd));
-	memset(cmd, 0, sizeof(t_cmd));
+	ft_memset(cmd, 0, sizeof(t_cmd));
 	cmd->argv = malloc(sizeof(char*) * ac);
 	i = 0;
 	while (*++av)

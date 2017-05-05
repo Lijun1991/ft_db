@@ -6,7 +6,7 @@
 /*   By: lwang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:17:59 by lwang             #+#    #+#             */
-/*   Updated: 2017/05/04 19:36:25 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 01:13:13 by lwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ static t_data	*parse_line(char *line)
 	char	*p;
 	t_data	*data;
 
-	if ((p = strchr(line, ':')) && p > line && !strchr(p + 1, ':'))
+	if ((p = ft_strchr(line, ':')) && p > line && !ft_strchr(p + 1, ':'))
 	{
 		data = malloc(sizeof(t_data));
 		data->next = NULL;
-		data->key = strndup(line, p - line);
-		data->value = strdup(p + 1);
+		data->key = ft_strndup(line, p - line);
+		data->value = ft_strdup(p + 1);
 		return (data);
 	}
 	return (NULL);
@@ -69,7 +69,7 @@ static t_entry	*read_file(char *path, t_entry *entry)
 	t_data	**cur;
 
 	dst = (t_entry*)malloc(sizeof(t_entry));
-	memset(dst, 0, sizeof(t_entry));
+	ft_memset(dst, 0, sizeof(t_entry));
 	cur = &dst->data;
 	if ((fd = open(path, O_RDONLY)) == -1)
 	{

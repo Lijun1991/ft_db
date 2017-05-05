@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 13:17:17 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 00:03:45 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 01:13:31 by lwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ static t_db	*set_db(void)
 	else
 	{
 		db = malloc(sizeof(t_db));
-		memset(db, 0, sizeof(t_db));
-		db->path = strdup(path);
+		ft_memset(db, 0, sizeof(t_db));
+		db->path = ft_strdup(path);
 	}
 	if (err)
 		ft_fprintf(2,

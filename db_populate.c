@@ -6,7 +6,7 @@
 /*   By: varnaud <varnaud@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 21:12:15 by varnaud           #+#    #+#             */
-/*   Updated: 2017/05/05 00:02:49 by varnaud          ###   ########.fr       */
+/*   Updated: 2017/05/05 01:10:11 by lwang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		fetch_file(t_uid *lst)
 	close(fd);
 	close(nll);
 	av = malloc(sizeof(char*) * 4);
-	av[0] = strdup("/usr/bin/ldapsearch");
+	av[0] = ft_strdup("/usr/bin/ldapsearch");
 	av[1] = ft_strjoin("uid=", lst->uid);
 	av[2] = NULL;
 	execve("/usr/bin/ldapsearch", av, NULL);
